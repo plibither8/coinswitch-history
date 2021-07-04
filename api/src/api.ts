@@ -1,7 +1,11 @@
 import polka from "polka";
 // @ts-ignore
 import send from "@polka/send-type";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Time } from "@prisma/client";
+import { stat } from "fs/promises";
+import path from "path";
+import fileSize from "filesize";
+import { format as timeAgo } from "timeago.js";
 
 const prisma = new PrismaClient();
 const server = polka();
@@ -27,11 +31,32 @@ server.get("/coins", async (req, res) => {
 server.get("/history/:symbol", async (req, res) => {
   const { symbol } = req.params;
   const history = await prisma.history.findMany({
-    where: {
-      symbol,
-    },
+    where: { symbol },
+    include: { time: true },
   });
   send(cors(res), 200, history);
+});
+
+// Show simple stats of the db
+server.get("/status", async (req, res) => {
+  const dbPath = path.join(__dirname, "../prisma", "dev.db");
+  const dbFileSize = fileSize((await stat(dbPath)).size);
+  const { time: lastUpdatedTime } = (await prisma.time.findFirst({
+    orderBy: { id: "desc" },
+  })) as Time;
+  const count = {
+    time: await prisma.time.count(),
+    coin: await prisma.coin.count(),
+    history: await prisma.history.count(),
+  };
+  send(cors(res), 200, {
+    dbFileSize,
+    lastUpdated: {
+      relative: timeAgo(lastUpdatedTime),
+      absolute: lastUpdatedTime,
+    },
+    count,
+  });
 });
 
 server.server?.on("close", () => {

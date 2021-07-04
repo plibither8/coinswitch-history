@@ -14,11 +14,18 @@ model Coin {
   history     History[]
 }
 
+model Time {
+  id          Int       @id @default(autoincrement())
+  time        DateTime  @default(now())
+  history     History[]
+}
+
 model History {
   id          Int       @id @default(autoincrement())
   symbol      String
   coin        Coin      @relation(fields: [symbol], references: [symbol])
   buyPrice    Decimal?
   sellPrice   Decimal?
-  time        DateTime  @default(now())
+  timeId      Int
+  time        Time      @relation(fields: [timeId], references: [id])
 }

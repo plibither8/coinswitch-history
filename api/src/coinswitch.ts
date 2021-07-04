@@ -46,19 +46,19 @@ const getCurrentCoinPrices = async (): Promise<CleanCsResponse[]> => {
 
 const dataCollector = async () => {
   prisma.$connect();
-  const time = new Date();
-  const items = await getCurrentCoinPrices();
+  const { id: timeId } = await prisma.time.create({ data: {} });
+  const prices = await getCurrentCoinPrices();
   const coins = await prisma.coin.findMany();
-  for (const item of items) {
+  for (const price of prices) {
     const coin =
-      coins.find((c) => c.symbol === item.coin.symbol) ||
-      (await prisma.coin.create({ data: item.coin }));
+      coins.find((c) => c.symbol === price.coin.symbol) ||
+      (await prisma.coin.create({ data: price.coin }));
     await prisma.history.create({
       data: {
-        time,
+        timeId,
         symbol: coin.symbol,
-        buyPrice: item.buyPrice,
-        sellPrice: item.sellPrice,
+        buyPrice: price.buyPrice,
+        sellPrice: price.sellPrice,
       },
     });
   }
@@ -66,6 +66,7 @@ const dataCollector = async () => {
 };
 
 const loop = async () => {
+  dataCollector();
   const interval = 5 * 60 * 1000; // 5 minutes
   setInterval(dataCollector, interval);
 };
