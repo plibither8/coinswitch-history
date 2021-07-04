@@ -7,8 +7,9 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "sourceMap": true,
+    "strict": true,
     "target": "es6"
   },
   "lib": ["ESNext"],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/global.d.ts"]
 }

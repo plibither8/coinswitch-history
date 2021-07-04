@@ -1,0 +1,24 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Coin {
+  id          Int       @id @default(autoincrement())
+  symbol      String    @unique
+  name        String
+  history     History[]
+}
+
+model History {
+  id          Int       @id @default(autoincrement())
+  symbol      String
+  coin        Coin      @relation(fields: [symbol], references: [symbol])
+  buyPrice    Decimal?
+  sellPrice   Decimal?
+  time        DateTime  @default(now())
+}
