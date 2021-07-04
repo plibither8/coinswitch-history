@@ -9,5 +9,9 @@ export interface History {
   symbol: string;
   buyPrice: number;
   sellPrice: number;
-  time: string;
+  timeId: number;
+  time: {
+    id: number;
+    time: string;
+  };
 }

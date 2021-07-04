@@ -7,7 +7,7 @@
 
   const getPlotData = async (symbol: string): Promise<number[][]> => {
     const { data: history, error } = await api<History[]>(`history/${symbol}`);
-    const timestamps = history.map(entry => new Date(entry.time).getTime() / 1000);
+    const timestamps = history.map(entry => new Date(entry.time.time).getTime() / 1000);
     const buy = history.map(entry => entry.buyPrice);
     const sell = history.map(entry => entry.sellPrice);
     return [timestamps, buy, sell];
