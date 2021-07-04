@@ -17,7 +17,9 @@ const cors = (res: any): any => {
 
 // Get list of coins available
 server.get("/coins", async (req, res) => {
-  const coins = await prisma.coin.findMany();
+  const coins = await prisma.coin.findMany({
+    orderBy: { name: "asc" },
+  });
   send(cors(res), 200, coins);
 });
 
