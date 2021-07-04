@@ -66,7 +66,6 @@ const dataCollector = async () => {
 };
 
 const loop = async () => {
-  dataCollector();
   const interval = 5 * 60 * 1000; // 5 minutes
   setInterval(dataCollector, interval);
 };

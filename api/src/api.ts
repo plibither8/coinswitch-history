@@ -6,10 +6,19 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const server = polka();
 
+const cors = (res: any): any => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Range"
+  );
+  return res;
+};
+
 // Get list of coins available
 server.get("/coins", async (req, res) => {
   const coins = await prisma.coin.findMany();
-  send(res, 200, coins);
+  send(cors(res), 200, coins);
 });
 
 // Get history of single coin
@@ -20,7 +29,7 @@ server.get("/history/:symbol", async (req, res) => {
       symbol,
     },
   });
-  send(res, 200, history);
+  send(cors(res), 200, history);
 });
 
 server.server?.on("close", () => {
