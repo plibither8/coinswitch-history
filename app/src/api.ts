@@ -1,4 +1,6 @@
-const API_BASE = "http://localhost:3000/";
+import env from "$lib/env";
+
+const { API_BASE } = env;
 
 interface ApiResponse<T = any> {
   data: undefined | T;
