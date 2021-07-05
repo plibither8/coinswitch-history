@@ -1,3 +1,4 @@
+// @ts-ignore
 import polka from "polka";
 // @ts-ignore
 import send from "@polka/send-type";
@@ -20,6 +21,7 @@ const cors = (res: any): any => {
 };
 
 // Get list of coins available
+// @ts-ignore
 server.get("/coins", async (req, res) => {
   const coins = await prisma.coin.findMany({
     orderBy: { name: "asc" },
@@ -28,6 +30,7 @@ server.get("/coins", async (req, res) => {
 });
 
 // Get history of single coin
+// @ts-ignore
 server.get("/history/:symbol", async (req, res) => {
   const { symbol } = req.params;
   const history = await prisma.history.findMany({
@@ -38,6 +41,7 @@ server.get("/history/:symbol", async (req, res) => {
 });
 
 // Show simple stats of the db
+// @ts-ignore
 server.get("/status", async (req, res) => {
   const dbPath = path.join(__dirname, "../prisma", "dev.db");
   const dbFileSize = fileSize((await stat(dbPath)).size);
