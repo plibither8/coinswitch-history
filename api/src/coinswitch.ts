@@ -71,4 +71,4 @@ const loop = async () => {
   setInterval(dataCollector, interval);
 };
 
-export default loop;
+loop();

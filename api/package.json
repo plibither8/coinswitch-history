@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "start": "node dist/main"
+    "start": "node dist/main",
+    "start-coinswitch": "node dist/coinswitch"
   },
   "devDependencies": {
     "@types/node": "^14.14.25",
