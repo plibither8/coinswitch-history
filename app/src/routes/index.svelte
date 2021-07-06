@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Coin, History } from "../interface";
-  import api from "../api";
+  import api, { API_BASE } from "../api";
   import { onMount } from "svelte";
 
   const getCoins = () => api<Coin[]>('coins');
@@ -16,7 +16,9 @@
   const renderHistoryPlot = async (selectedCoin: string) => {
     const plotRoot = document.querySelector('#plot');
     plotRoot.innerHTML = '';
+    loadingPlot = true;
     const plotData = await getPlotData(selectedCoin);
+    loadingPlot = false;
     new uPlot({
       height: 600,
       width: 1200,
@@ -38,6 +40,7 @@
   let selectedCoin = "btc";
   let mounted = false;
   let uPlot;
+  let loadingPlot = false;
 
   onMount(async () => {
     uPlot = (await import("uplot")).default;
@@ -67,6 +70,12 @@
     </select>
   {/if}
 {/await}
+
+{#if loadingPlot}
+  <p>Loading history...</p>
+{/if}
+
+<img src="{API_BASE}icons/{selectedCoin}.png" alt=""/>
 
 <div id="plot"></div>
 
