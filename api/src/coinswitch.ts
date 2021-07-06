@@ -83,10 +83,12 @@ const dataCollector = async () => {
   prisma.$disconnect();
 };
 
-const loop = async () => {
+const main = () => {
   dataCollector();
-  const interval = 5 * 60 * 1000; // 5 minutes
-  setInterval(dataCollector, interval);
+  if (process.argv[2] === "loop") {
+    const interval = 5 * 60 * 1000; // 5 minutes
+    setInterval(dataCollector, interval);
+  }
 };
 
-loop();
+main();
