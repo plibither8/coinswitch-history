@@ -11,5 +11,5 @@
     "target": "es6"
   },
   "lib": ["ESNext"],
-  "include": ["src/**/*.ts", "src/global.d.ts"]
+  "include": ["src/**/*.ts", "src/global.d.ts", "scripts/**/*.ts"]
 }
