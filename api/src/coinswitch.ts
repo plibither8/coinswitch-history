@@ -1,7 +1,9 @@
-import { Prisma, PrismaClient } from "@prisma/client";
 import "dotenv/config";
+import { Prisma, PrismaClient } from "@prisma/client";
 import fetch from "node-fetch";
+import { createWriteStream, existsSync } from "fs";
 import { CleanCsResponse, CsBalance } from "./interface";
+import path from "path";
 
 const prisma = new PrismaClient();
 const ACCESS_TOKEN: string = process.env.CS_ACCESS_TOKEN as string;
@@ -12,6 +14,7 @@ const cleanupEntry = (apiEntry: CsBalance): CleanCsResponse => {
   const coin: CleanCsResponse["coin"] = {
     name: apiEntry.coin.name,
     symbol: apiEntry.coin.symbol,
+    iconUrl: apiEntry.coin.logo,
   };
   return {
     coin,
@@ -44,6 +47,19 @@ const getCurrentCoinPrices = async (): Promise<CleanCsResponse[]> => {
   return data.map(cleanupEntry);
 };
 
+const getLocalIconPath = (symbol: string): string =>
+  path.join(__dirname, "../public", "icons", `${symbol}.png`);
+
+const downloadIcon = async (symbol: string, url: string): Promise<void> => {
+  const response = await fetch(url);
+  const fileStream = createWriteStream(getLocalIconPath(symbol));
+  await new Promise((resolve, reject) => {
+    response.body.pipe(fileStream);
+    response.body.on("error", reject);
+    fileStream.on("finish", resolve);
+  });
+};
+
 const dataCollector = async () => {
   prisma.$connect();
   const { id: timeId } = await prisma.time.create({ data: {} });
@@ -53,6 +69,8 @@ const dataCollector = async () => {
     const coin =
       coins.find((c) => c.symbol === price.coin.symbol) ||
       (await prisma.coin.create({ data: price.coin }));
+    if (!existsSync(getLocalIconPath(coin.symbol)))
+      await downloadIcon(coin.symbol, price.coin.iconUrl);
     await prisma.history.create({
       data: {
         timeId,

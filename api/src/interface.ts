@@ -49,7 +49,11 @@ export interface CsBalance {
 }
 
 export interface CleanCsResponse {
-  coin: Omit<Coin, "id">;
+  coin: {
+    name: string;
+    symbol: string;
+    iconUrl: string;
+  };
   buyPrice: History["buyPrice"];
   sellPrice: History["sellPrice"];
 }

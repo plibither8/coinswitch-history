@@ -7,6 +7,7 @@ import { stat } from "fs/promises";
 import path from "path";
 import fileSize from "filesize";
 import { format as timeAgo } from "timeago.js";
+import serveStatic from "serve-static";
 
 const prisma = new PrismaClient();
 const server = polka();
@@ -19,6 +20,10 @@ const cors = (res: any): any => {
   );
   return res;
 };
+
+// Serve all the static files (icons)
+const staticPath = path.join(__dirname, "../public");
+server.use(serveStatic(staticPath));
 
 // Get list of coins available
 // @ts-ignore
