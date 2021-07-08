@@ -68,7 +68,9 @@ const dataCollector = async () => {
   for (const price of prices) {
     const coin =
       coins.find((c) => c.symbol === price.coin.symbol) ||
-      (await prisma.coin.create({ data: price.coin }));
+      (await prisma.coin.create({
+        data: { name: price.coin.name, symbol: price.coin.symbol },
+      }));
     if (!existsSync(getLocalIconPath(coin.symbol)))
       await downloadIcon(coin.symbol, price.coin.iconUrl);
     await prisma.history.create({
