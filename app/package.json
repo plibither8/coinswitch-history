@@ -33,6 +33,8 @@
   },
   "type": "module",
   "dependencies": {
+    "js-file-download": "^0.4.12",
+    "svelte-hero-icons": "^2.2.0",
     "uplot": "^1.6.13"
   }
 }

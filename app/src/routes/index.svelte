@@ -2,12 +2,17 @@
   import type { Coin, History } from "../interface";
   import api, { API_BASE } from "../api";
   import { onMount } from "svelte";
-import Container from "$lib/components/Container.svelte";
+  import { slide } from "svelte/transition";
+  import Container from "$lib/components/Container.svelte";
+  import Icon, { Database, ViewList, Refresh } from "svelte-hero-icons";
+  import fileDownload from 'js-file-download';
 
   const getCoins = () => api<Coin[]>('coins');
 
+  const getStats = () => api<any>('status');
+
   const getPlotData = async (symbol: string): Promise<number[][]> => {
-    const { data: history, error } = await api<History[]>(`history/${symbol}`);
+    ({ data: history } = await api<History[]>(`history/${symbol}`));
     const timestamps = history.map(entry => new Date(entry.time.time).getTime() / 1000);
     const buy = history.map(entry => entry.buyPrice);
     const sell = history.map(entry => entry.sellPrice);
@@ -38,15 +43,44 @@ import Container from "$lib/components/Container.svelte";
     }, plotData, plotRoot);
   }
 
+  let stats: any = {};
+  let coins: Coin[] = [];
+  let history: History[] = [];
   let selectedCoin = "btc";
   let mounted = false;
   let uPlot;
   let loadingPlot = false;
+  let refreshing = false;
+
+  const downloadJson = () => {
+    const data = JSON.stringify(history, null, 2);
+    fileDownload(data, `${selectedCoin}_${new Date().toISOString()}.json`);
+  }
+
+  const downloadCsv = () => {
+    const rows = [
+      ["Time", "Buy price", "Sell price"].join(","),
+      ...history.map(history => [
+        history.time.time,
+        history.buyPrice,
+        history.sellPrice,
+      ].join(",")),
+    ].join("\n");
+    fileDownload(rows, `${selectedCoin}_${new Date().toISOString()}.csv`);
+  }
 
   onMount(async () => {
+    ({ data: stats } = await getStats());
+    ({ data: coins } = await getCoins());
     uPlot = (await import("uplot")).default;
     mounted = true;
   });
+
+  const refresh = async () => {
+    ({ data: stats } = await getStats());
+    ({ data: coins } = await getCoins());
+    await renderHistoryPlot(selectedCoin);
+  }
 
   $: {
     if (mounted) renderHistoryPlot(selectedCoin);
@@ -55,55 +89,110 @@ import Container from "$lib/components/Container.svelte";
   }
 </script>
 
-<Container>
-  <h1 class="text-4xl font-bold text-indigo-900">CoinSwitch History</h1>
-  <p class="text-lg text-indigo-900 max-w-2xl leading-relaxed">Explore and download the history and timeseries data of all crypto-INR pairs offered by the CoinSwitch exchange.</p>
+<Container className="bg-gray-100 border-b">
+  <div class="flex items-center space-x-3">
+    <img class="h-7 w-7" src="/logo.png" alt="CoinSwitch Kuber logo" />
+    <h1 class="text-2xl font-bold text-black">CoinSwitch History</h1>
+  </div>
+  <p class="text-lg text-gray-700 max-w-2xl leading-relaxed">Explore and download the history and timeseries data of all crypto-INR pairs offered by the CoinSwitch exchange.</p>
+  <p class="italic text-gray-500 max-w-2xl leading-relaxed">"CoinSwitch History" is not affiliated to or endorsed by CoinSwitch Kuber.</p>
 </Container>
 
-<Container>
-  <h1 class="text-3xl font-bold text-indigo-700">
-    <span>1.</span>
-    <span>Select a coin</span>
-  </h1>
+<Container className="bg-gray-50 border-b">
+  <h1 class="text-lg font-bold text-gray-900">Stats</h1>
+  {#if Object.keys(stats).length}
+    <ul class="space-y-1">
+      <li class="text-gray-700 leading-relaxed list-disc">Last updated <strong>{stats.lastUpdated.relative}</strong> at {new Date(stats.lastUpdated.absolute).toLocaleString()}</li>
+      <li class="text-gray-700 leading-relaxed list-disc"><strong>{new Intl.NumberFormat().format(stats.count.time)} times</strong> recorded since {new Date(stats.firstTime).toLocaleString()}</li>
+      <li class="text-gray-700 leading-relaxed list-disc">Database filesize is <strong>{stats.dbFileSize}</strong></li>
+    </ul>
+  {:else}
+    <p class="text-gray-700 leading-relaxed">Loading...</p>
+  {/if}
+</Container>
 
-  {#await getCoins()}
-    <p>Loading coins...</p>
-  {:then { error, data: coins }}
-    {#if error}
-      <p>Error occured in getting list of coins:</p>
-      <pre>
-        {error}
-      </pre>
-    {:else}
-      <select bind:value={selectedCoin}>
+<Container className="-mb-10">
+  <div class="space-y-1">
+    <h1 class="text-xl font-bold text-gray-700">1. Select a coin</h1>
+    <p class="text-base text-gray-600 leading-relaxed">Choose from the {coins.length} coins available on the exchange</p>
+  </div>
+
+  {#if coins.length}
+    <div class="flex items-center space-x-5">
+      <img class="h-7 w-7" src="{API_BASE}icons/{selectedCoin}.png" alt=""/>
+      <select
+        bind:value={selectedCoin}
+        class="p-3 rounded bg-gray-50 border text-gray-800 font-bold"
+      >
         {#each coins as coin}
-          <option value="{coin.symbol}">{coin.name}</option>
+          <option value={coin.symbol}>{coin.name}</option>
         {/each}
       </select>
-    {/if}
-  {/await}
-</Container>
-
-<Container>
-  <h1 class="text-3xl font-bold text-indigo-600">
-    <span>2.</span>
-    <span>Explore and view the charts</span>
-  </h1>
-
-  {#if loadingPlot}
-    <p>Loading history...</p>
+      <button
+        class="transition border focus:ring-2 ring-gray-200 bg-gray-50 hover:bg-gray-100 rounded py-2 px-3 space-x-3 text-gray-700 flex items-center text-sm"
+        on:click={async () => {
+          refreshing = true;
+          await refresh();
+          refreshing = false;
+        }}
+      >
+        <Icon src={Refresh} size="16" class="text-gray-700" solid />
+        <span>Refresh{refreshing ? 'ing...' : ''}</span>
+      </button>
+    </div>
+  {:else}
+    <p>Loading coins...</p>
   {/if}
-
-  <img src="{API_BASE}icons/{selectedCoin}.png" alt=""/>
-
-  <div id="plot" class="overflow-scroll"></div>
 </Container>
 
 <Container>
-  <h1 class="text-3xl font-bold text-indigo-500">
-    <span>3.</span>
-    <span>Download the data</span>
-  </h1>
+  <div class="space-y-1">
+    <h1 class="text-xl font-bold text-gray-700">2. Explore the charts and details</h1>
+    <p class="text-base text-gray-600 leading-relaxed">Hover to see prices, select ranges to zoom in. Charts are optimized for desktop, just btw.</p>
+  </div>
+
+</Container>
+
+<section class="flex justify-center">
+  <div class="mx-5 p-5 md:p-10 rounded-xl shadow-lg bg-gray-50 max-w-7xl overflow-auto">
+    {#if loadingPlot}
+      <p transition:slide>Loading history...</p>
+    {:else}
+      <div transition:slide id="plot" class="flex"></div>
+    {/if}
+  </div>
+</section>
+
+<Container>
+  <div class="space-y-1">
+    <h1 class="text-xl font-bold text-gray-700">3. Download the data</h1>
+    <p class="text-base text-gray-600 leading-relaxed">Download the timeseries data for the {selectedCoin.toUpperCase()}.</p>
+  </div>
+  <div class="flex flex-col sm:flex-row sm:space-x-5 space-y-5 sm:space-y-0">
+    <button
+      class="transition border focus:ring-2 ring-green-100 bg-green-50 hover:bg-green-100 hover:border-green-300 border-green-200 rounded flex items-center py-2 px-3 space-x-3 text-green-700"
+      on:click={downloadCsv}
+    >
+      <Icon src={ViewList} size="22" class="text-green-700" />
+      <span>Download CSV</span>
+    </button>
+    <button
+      class="transition border focus:ring-2 ring-yellow-100 bg-yellow-50 hover:bg-yellow-100 hover:border-yellow-300 border-yellow-200 rounded flex items-center py-2 px-3 space-x-3 text-yellow-700"
+      on:click={downloadJson}
+    >
+      <Icon src={Database} size="22" class="text-yellow-700" />
+      <span>Download JSON</span>
+    </button>
+  </div>
+</Container>
+
+<Container className="bg-gray-100 border-t">
+  <h1 class="text-lg font-bold text-gray-900">About this project</h1>
+  <p class="text-gray-700 leading-relaxed">
+    As expected, this was started off as and still is a (better) way to view historical price data of INR-Crypto pairs offered by CoinSwitch to get a better insight (the app has smoothened-out, hard-to-read graphs with non-granular intervals).
+  </p>
+  <p class="text-gray-700 leading-relaxed">Built by me, <a class="underline" href="https://mihir.ch" rel="noopener" target="_blank">Mihir Chaturvedi</a> over two boring Sundays. Data is sourced through their internal API calls, and updates every five minutes. Powered by uPlot, SvelteKit, Tailwind, Prisma and SQLite and seemingly bad code :).</p>
+  <a class="underline text-black inline-block" href="https://github.com/plibither8/coinswitch-history">View code on GitHub</a>
 </Container>
 
 <style global>
