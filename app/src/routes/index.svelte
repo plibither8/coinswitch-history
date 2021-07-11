@@ -154,7 +154,7 @@
 </Container>
 
 <section class="flex justify-center">
-  <div class="mx-5 p-5 md:p-10 rounded-xl shadow-lg bg-gray-50 max-w-7xl overflow-auto">
+  <div class="mx-5 p-5 md:p-10 rounded-lg md:rounded-xl shadow-md md:shadow-lg bg-white max-w-7xl overflow-auto">
     {#if loadingPlot}
       <p transition:slide>Loading history...</p>
     {:else}
