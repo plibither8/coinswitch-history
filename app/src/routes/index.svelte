@@ -129,15 +129,14 @@
         {/each}
       </select>
       <button
-        class="transition border focus:ring-2 ring-gray-200 bg-gray-50 hover:bg-gray-100 rounded py-2 px-3 space-x-3 text-gray-700 flex items-center text-sm"
+        class="transition border focus:ring-2 ring-gray-200 bg-gray-50 hover:bg-gray-100 rounded p-3 text-gray-700 flex items-center text-sm"
         on:click={async () => {
           refreshing = true;
           await refresh();
           refreshing = false;
         }}
       >
-        <Icon src={Refresh} size="16" class="text-gray-700" solid />
-        <span>Refresh{refreshing ? 'ing...' : ''}</span>
+        <Icon src={Refresh} size="16" class="text-gray-700 {refreshing && 'animate-spin'}" solid />
       </button>
     </div>
   {:else}
@@ -154,13 +153,13 @@
 </Container>
 
 <section class="flex justify-center">
-  <!-- <div class="mx-5 p-5 md:p-10 rounded-lg md:rounded-xl shadow-md md:shadow-lg bg-white max-w-7xl overflow-auto">
+  <div class="mx-5 p-5 md:p-10 rounded-lg md:rounded-xl shadow-md md:shadow-lg bg-white max-w-7xl overflow-auto">
     {#if loadingPlot}
       <p transition:slide>Loading history...</p>
     {:else}
       <div transition:slide id="plot" class="flex"></div>
     {/if}
-  </div> -->
+  </div>
 </section>
 
 <Container>
