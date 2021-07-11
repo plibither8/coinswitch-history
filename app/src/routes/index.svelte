@@ -154,13 +154,13 @@
 </Container>
 
 <section class="flex justify-center">
-  <div class="mx-5 p-5 md:p-10 rounded-lg md:rounded-xl shadow-md md:shadow-lg bg-white max-w-7xl overflow-auto">
+  <!-- <div class="mx-5 p-5 md:p-10 rounded-lg md:rounded-xl shadow-md md:shadow-lg bg-white max-w-7xl overflow-auto">
     {#if loadingPlot}
       <p transition:slide>Loading history...</p>
     {:else}
       <div transition:slide id="plot" class="flex"></div>
     {/if}
-  </div>
+  </div> -->
 </section>
 
 <Container>
@@ -183,6 +183,94 @@
       <Icon src={Database} size="22" class="text-yellow-700" />
       <span>Download JSON</span>
     </button>
+  </div>
+</Container>
+
+<Container className="bg-gray-50 border-t">
+  <h1 class="text-lg font-bold text-gray-900">API</h1>
+  <p class="leading-normal text-gray-700">The API used by this webapp to query coins and history is openly available, so long as my VPS has the capacity to cater to its requests. Take note:
+  </p>
+  <ul class="space-y-1">
+    <li class="text-gray-700 list-inside list-disc"><strong>Base URL:</strong> <span>https://api.cs.mhr.cx/</span></li>
+    <li class="text-gray-700 list-inside list-disc">No authentication/authorization or API key required.</li>
+    <li class="text-gray-700 list-inside list-disc">No hard rate limits imposed, please use it sanely. If abused, I'll have to take appropriate actions 😞.</li>
+    <li class="text-gray-700 list-inside list-disc">Endpoints and request/response shapes are subject to change without warning.</li>
+  </ul>
+  <div class="space-y-3">
+    <h2 class="text-base text-gray-700 font-bold">Get history of a coin</h2>
+    <div class="space-x-3">
+      <span class="text-xs p-1 rounded bg-green-800 text-white font-bold">GET</span>
+      <span class="bg-gray-200 p-1 rounded text-sm font-mono">/history/:symbol</span>
+    </div>
+    <p class="text-sm text-gray-600 leading-normal">Get the history of a coin, specified by its symbol in lowercase.</p>
+    <details class="space-y-2">
+      <summary class="text-sm text-gray-600">Example response</summary>
+      <pre class="text-xs bg-gray-200 rounded p-2 overflow-auto">{`[
+  {
+    "id": 50262,
+    "symbol": "btc",
+    "buyPrice": "2603664",
+    "sellPrice": "2575367.4595",
+    "timeId": 838,
+    "time": {
+      "id": 838,
+      "time": "2021-07-11T06:32:43.651Z"
+    }
+  },
+  ...
+]`}
+      </pre>
+    </details>
+  </div>
+  <div class="space-y-3">
+    <h2 class="text-base text-gray-700 font-bold">Get list of coins</h2>
+    <div class="space-x-3">
+      <span class="text-xs p-1 rounded bg-green-800 text-white font-bold">GET</span>
+      <span class="bg-gray-200 p-1 rounded text-sm font-mono">/coins</span>
+    </div>
+    <p class="text-sm text-gray-600 leading-normal">Get list of coins available on the exchange and this service.</p>
+    <details class="space-y-2">
+      <summary class="text-sm text-gray-600">Example response</summary>
+      <pre class="text-xs bg-gray-200 rounded p-2 overflow-auto">{`[
+  {
+    "id": 124,
+    "symbol": "zrx",
+    "name": "0x"
+  },
+  {
+    "id": 146,
+    "symbol": "1inch",
+    "name": "1inch"
+  },
+  ...
+]`}
+      </pre>
+    </details>
+  </div>
+  <div class="space-y-3">
+    <h2 class="text-base text-gray-700 font-bold">Get stats and status of this service and DB</h2>
+    <div class="space-x-3">
+      <span class="text-xs p-1 rounded bg-green-800 text-white font-bold">GET</span>
+      <span class="bg-gray-200 p-1 rounded text-sm font-mono">/status</span>
+    </div>
+    <p class="text-sm text-gray-600 leading-normal">Get statistics and health information regarding the database and its items.</p>
+    <details class="space-y-2">
+      <summary class="text-sm text-gray-600">Example response</summary>
+      <pre class="text-xs bg-gray-200 rounded p-2 overflow-auto">{`{
+  "dbFileSize": "340 KB",
+  "firstTime": "2021-07-11T06:32:43.651Z",
+  "lastUpdated": {
+    "relative": "4 minutes ago",
+    "absolute": "2021-07-11T15:55:04.643Z"
+  },
+  "count": {
+    "time": 113,
+    "coin": 83,
+    "history": 9379
+  }
+}`}
+      </pre>
+    </details>
   </div>
 </Container>
 
