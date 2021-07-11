@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "start": "node dist/main",
     "start-coinswitch": "node dist/coinswitch"
   },
