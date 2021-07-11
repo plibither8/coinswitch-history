@@ -102,9 +102,9 @@
   <h1 class="text-lg font-bold text-gray-900">Stats</h1>
   {#if Object.keys(stats).length}
     <ul class="space-y-1">
-      <li class="text-gray-700 leading-relaxed list-disc">Last updated <strong>{stats.lastUpdated.relative}</strong> at {new Date(stats.lastUpdated.absolute).toLocaleString()}</li>
-      <li class="text-gray-700 leading-relaxed list-disc"><strong>{new Intl.NumberFormat().format(stats.count.time)} times</strong> recorded since {new Date(stats.firstTime).toLocaleString()}</li>
-      <li class="text-gray-700 leading-relaxed list-disc">Database filesize is <strong>{stats.dbFileSize}</strong></li>
+      <li class="text-gray-700 leading-relaxed list-disc list-inside">Last updated <strong>{stats.lastUpdated.relative}</strong> at {new Date(stats.lastUpdated.absolute).toLocaleString()}</li>
+      <li class="text-gray-700 leading-relaxed list-disc list-inside"><strong>{new Intl.NumberFormat().format(stats.count.time)} times</strong> recorded since {new Date(stats.firstTime).toLocaleString()}</li>
+      <li class="text-gray-700 leading-relaxed list-disc list-inside">Database filesize is <strong>{stats.dbFileSize}</strong></li>
     </ul>
   {:else}
     <p class="text-gray-700 leading-relaxed">Loading...</p>
