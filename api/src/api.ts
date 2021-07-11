@@ -50,9 +50,11 @@ server.get("/history/:symbol", async (req, res) => {
 server.get("/status", async (req, res) => {
   const dbPath = path.join(__dirname, "../prisma", "dev.db");
   const dbFileSize = fileSize((await stat(dbPath)).size);
-  const { time: lastUpdatedTime } = (await prisma.time.findFirst({
-    orderBy: { id: "desc" },
-  })) as Time;
+  const times = await prisma.time.findMany({
+    orderBy: { id: "asc" },
+  });
+  const firstTime = times[0].time;
+  const lastUpdatedTime = (times.pop() as Time).time;
   const count = {
     time: await prisma.time.count(),
     coin: await prisma.coin.count(),
@@ -60,6 +62,7 @@ server.get("/status", async (req, res) => {
   };
   send(cors(res), 200, {
     dbFileSize,
+    firstTime,
     lastUpdated: {
       relative: timeAgo(lastUpdatedTime),
       absolute: lastUpdatedTime,
