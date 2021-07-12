@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { slide } from "svelte/transition";
+  import { cubicOut } from "svelte/easing";
+  import { externalData, refreshing } from "$lib/store";
   import Container from "./Container.svelte";
   import ListItem from "./ListItem.svelte";
-  import { externalData } from "$lib/store";
   import Ping from "./Ping.svelte";
 
   const localDate = (date: string): string => new Date(date).toLocaleString();
@@ -12,8 +14,11 @@
 
 <Container className="bg-gray-50 border-b">
   <h1 class="text-lg font-bold text-gray-900">Stats</h1>
-  {#if Object.keys(stats).length}
-    <ul class="space-y-1">
+  {#if Object.keys(stats).length && !$refreshing}
+    <ul
+      transition:slide="{{ duration: 200, easing: cubicOut }}"
+      class="space-y-1"
+    >
       <ListItem>
         Last updated
         <Ping />
