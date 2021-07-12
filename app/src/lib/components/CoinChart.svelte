@@ -43,6 +43,14 @@
             width: 1,
           },
         ],
+        axes: [
+          {},
+          {},
+          {
+            size: 20,
+            gap: 10,
+          },
+        ],
       },
       plotData,
       plotRoot
