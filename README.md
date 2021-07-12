@@ -1,6 +1,8 @@
-# 🪙 CoinSwitch History
+# 🪙 [CoinSwitch History](https://cs.mhr.cx)
 
 > Interactively explore granular (5-min intervals) history of buy/sell prices of X-INR pairs from [CoinSwitch](https://coinswitch.co).
+
+[Visit the app here: **cx.mhr.cx**](https://cs.mhr.cx)
 
 As expected, this was started off as and still is a (better) way to view historical price data of crypto-INR pairs offered by CoinSwitch to get a better insight (the app has smoothened-out, hard-to-read graphs with non-granular intervals).
 
