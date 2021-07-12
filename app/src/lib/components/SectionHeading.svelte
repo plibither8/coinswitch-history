@@ -7,7 +7,7 @@
 </script>
 
 <div class="space-x-6 flex items-center">
-  <Icon src="{icon}" size="22" class="text-gray-600" />
+  <Icon src="{icon}" size="22" class="text-gray-600 flex-shrink-0" />
   <div class="space-y-1">
     <h1 class="text-xl font-bold text-gray-700">
       {heading}
