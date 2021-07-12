@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { updateData } from "$lib/store";
+  import Seo from "$lib/components/Seo.svelte";
   import Hero from "$lib/components/Hero.svelte";
   import Stats from "$lib/components/Stats.svelte";
   import CoinSelection from "$lib/components/CoinSelection.svelte";
@@ -13,6 +14,8 @@
     await updateData();
   });
 </script>
+
+<Seo />
 
 <header>
   <Hero />

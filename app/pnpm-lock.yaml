@@ -19,6 +19,7 @@ specifiers:
   svelte-check: ^2.0.0
   svelte-hero-icons: ^2.2.0
   svelte-preprocess: ^4.7.3
+  svelte-seo: ^1.2.1
   svelte-twemoji: ^1.0.4
   tailwindcss: ^2.2.4
   tslib: ^2.0.0
@@ -28,6 +29,7 @@ specifiers:
 dependencies:
   js-file-download: 0.4.12
   svelte-hero-icons: 2.2.0
+  svelte-seo: 1.2.1_typescript@4.3.5
   svelte-twemoji: 1.0.4
   uplot: 1.6.13
 
@@ -2085,6 +2087,14 @@ packages:
       mri: 1.1.6
     dev: true
 
+  /schema-dts/0.8.3_typescript@4.3.5:
+    resolution: {integrity: sha512-GSLeVkUgEe8DzS8/FGWou1wlC8tQ1KXA5amCqCIH/psUzF74fWswtT0QFlSoJLT08CYyixnc3S/lkAm+RExoLQ==}
+    peerDependencies:
+      typescript: '>=3.4.0'
+    dependencies:
+      typescript: 4.3.5
+    dev: false
+
   /semver/7.3.5:
     resolution: {integrity: sha512-PoeGJYh8HK4BTO/a9Tf6ZG3veo/A7ZVsYrSA6J8ny9nb3B1VrpkuN+z9OE5wfE5p6H4LchYZsegiQgbJD94ZFQ==}
     engines: {node: '>=10'}
@@ -2297,6 +2307,14 @@ packages:
       svelte: 3.38.3
       typescript: 4.3.5
     dev: true
+
+  /svelte-seo/1.2.1_typescript@4.3.5:
+    resolution: {integrity: sha512-e1N1MSgct4y0XYUzWEgBy5zdlmfGAC8qn4RuL6n7tjSrl3qr7w0bY8Nv40Vbnv+UaejL7VlX9QQGjzFnSPZ2DQ==}
+    dependencies:
+      schema-dts: 0.8.3_typescript@4.3.5
+    transitivePeerDependencies:
+      - typescript
+    dev: false
 
   /svelte-twemoji/1.0.4:
     resolution: {integrity: sha512-OQOfrSMjY7rjmmLpBFiUnL2hEPQoY+kVQQGl7EnnhzrYcHup57jZ6WB7OpRlUQwP57N2ScEhpEnfYlzWSy+Stg==}
