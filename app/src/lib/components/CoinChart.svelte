@@ -53,7 +53,7 @@
   let plotRoot: HTMLDivElement;
   let loadingPlot = false;
 
-  $: updateHistory($selectedCoin);
+  $: !refreshing && updateHistory($selectedCoin);
   $: renderHistoryPlot($externalData.history);
   $: plotRoot && (loadingPlot || $refreshing) && (plotRoot.innerHTML = "");
 
