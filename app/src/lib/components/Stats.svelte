@@ -1,17 +1,13 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import Container from "./Container.svelte";
   import ListItem from "./ListItem.svelte";
-  import api from "$lib/api";
   import { externalData } from "$lib/store";
+  import Ping from "./Ping.svelte";
 
   const localDate = (date: string): string => new Date(date).toLocaleString();
-  let stats: any = {};
 
-  onMount(async () => {
-    ({ data: stats } = await api<any>("status"));
-    $externalData.stats = stats;
-  });
+  let stats: any = {};
+  $: ({ stats } = $externalData);
 </script>
 
 <Container className="bg-gray-50 border-b">
@@ -19,7 +15,9 @@
   {#if Object.keys(stats).length}
     <ul class="space-y-1">
       <ListItem>
-        Last updated <strong>{stats.lastUpdated.relative}</strong>
+        Last updated
+        <Ping />
+        <strong>{stats.lastUpdated.relative}</strong>
         at {localDate(stats.lastUpdated.absolute)}
       </ListItem>
       <ListItem>

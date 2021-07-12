@@ -3,7 +3,7 @@
   export let method: "GET" | "POST";
   export let endpoint: string;
   export let description: string;
-  export let exampleResponse: any;
+  export let exampleResponse: any = undefined;
 </script>
 
 <article class="space-y-3">
@@ -17,11 +17,13 @@
   <p class="text-sm text-gray-600 leading-normal">
     {description}
   </p>
-  <details class="space-y-2">
-    <summary class="text-sm text-gray-600">Example response</summary>
-    <pre
-      class="text-xs bg-gray-200 rounded p-2 overflow-auto">
-      {JSON.stringify(exampleResponse, null, 2)}
-    </pre>
-  </details>
+  {#if exampleResponse}
+    <details class="space-y-2">
+      <summary class="text-sm text-gray-600">Example response</summary>
+      <pre
+        class="text-xs bg-gray-200 rounded p-2 overflow-auto">
+        {JSON.stringify(exampleResponse, null, 2)}
+      </pre>
+    </details>
+  {/if}
 </article>

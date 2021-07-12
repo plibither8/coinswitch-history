@@ -9,7 +9,7 @@
     method: "GET" | "POST";
     endpoint: string;
     description: string;
-    exampleResponse: any;
+    exampleResponse?: any;
   }
 
   let endpoints: Endpoint[] = [];
@@ -37,6 +37,12 @@
       description:
         "Get statistics and health information regarding the database and its items.",
       exampleResponse: $externalData.stats,
+    },
+    {
+      title: "Get coin logos' PNG",
+      method: "GET",
+      endpoint: "/icons/:symbol.png",
+      description: "Get a .PNG file of the coin's logo",
     },
   ];
 </script>

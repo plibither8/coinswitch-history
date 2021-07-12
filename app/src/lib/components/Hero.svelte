@@ -1,11 +1,12 @@
 <script lang="ts">
+  import CoinLogo from "./CoinLogo.svelte";
   import Container from "./Container.svelte";
 </script>
 
 <Container className="bg-gray-100 border-b">
   <div class="flex items-center space-x-3">
-    <img class="h-7 w-7" src="/logo.png" alt="CoinSwitch Kuber logo" />
-    <h1 class="text-2xl font-bold text-black">CoinSwitch History</h1>
+    <CoinLogo />
+    <h1 class="text-2xl font-bold text-gray-900">CoinSwitch History</h1>
   </div>
   <p class="text-lg text-gray-700 max-w-2xl leading-relaxed">
     Explore and download the history and timeseries data of all crypto-INR pairs

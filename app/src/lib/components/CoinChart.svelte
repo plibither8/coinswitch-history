@@ -4,13 +4,17 @@
   import { slide } from "svelte/transition";
   import Container from "./Container.svelte";
   import api from "$lib/api";
-  import { externalData, selectedCoin } from "$lib/store";
+  import { externalData, selectedCoin, refreshing } from "$lib/store";
   import { ChartBar } from "svelte-hero-icons";
   import SectionHeading from "./SectionHeading.svelte";
 
-  const getPlotData = async (symbol: string): Promise<number[][]> => {
+  const updateHistory = async (symbol: string): Promise<void> => {
+    loadingPlot = true;
     $externalData.history = (await api<History[]>(`history/${symbol}`)).data;
-    const { history } = $externalData;
+    loadingPlot = false;
+  };
+
+  const getPlotData = (history: History[]): number[][] => {
     const timestamps = history.map(
       (entry) => new Date(entry.time.time).getTime() / 1000
     );
@@ -19,16 +23,9 @@
     return [timestamps, buy, sell];
   };
 
-  const renderHistoryPlot = async (coin: string) => {
+  const renderHistoryPlot = async (history: History[]) => {
     if (!uPlot) return;
-
-    const plotRoot = document.querySelector("#plot");
-    plotRoot.innerHTML = "";
-
-    loadingPlot = true;
-    const plotData = await getPlotData(coin);
-    loadingPlot = false;
-
+    const plotData = getPlotData(history);
     new uPlot(
       {
         height: 600,
@@ -36,12 +33,12 @@
         series: [
           {},
           {
-            label: `Buy ${coin.toUpperCase()}`,
+            label: `Buy ${$selectedCoin.toUpperCase()}`,
             stroke: "red",
             width: 1,
           },
           {
-            label: `Sell ${coin.toUpperCase()}`,
+            label: `Sell ${$selectedCoin.toUpperCase()}`,
             stroke: "green",
             width: 1,
           },
@@ -53,11 +50,16 @@
   };
 
   let uPlot;
+  let plotRoot: HTMLDivElement;
   let loadingPlot = false;
-  $: uPlot && renderHistoryPlot($selectedCoin);
+
+  $: updateHistory($selectedCoin);
+  $: renderHistoryPlot($externalData.history);
+  $: plotRoot && (loadingPlot || $refreshing) && (plotRoot.innerHTML = "");
 
   onMount(async () => {
     uPlot = (await import("uplot")).default;
+    plotRoot = document.querySelector("#plot");
   });
 </script>
 
@@ -73,7 +75,7 @@
   <div
     class="mx-5 p-5 md:p-10 rounded-lg md:rounded-xl shadow-md md:shadow-lg bg-white max-w-7xl overflow-auto"
   >
-    {#if loadingPlot}
+    {#if loadingPlot || $refreshing}
       <p transition:slide>Loading history...</p>
     {/if}
     <div id="plot" class="flex"></div>

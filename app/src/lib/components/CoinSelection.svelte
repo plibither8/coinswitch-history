@@ -1,19 +1,14 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import type { Coin } from "$lib/interface";
-  import api, { API_BASE } from "$lib/api";
+  import { API_BASE } from "$lib/api";
   import { externalData, selectedCoin } from "$lib/store";
   import Container from "./Container.svelte";
-  import Icon, { CursorClick, Refresh } from "svelte-hero-icons";
+  import { CursorClick } from "svelte-hero-icons";
   import SectionHeading from "./SectionHeading.svelte";
+  import Refresh from "./Refresh.svelte";
 
   let coins: Coin[] = [];
-  let refreshing = false;
-
-  onMount(async () => {
-    ({ data: coins } = await api<Coin[]>("coins"));
-    $externalData.coins = coins;
-  });
+  $: ({ coins } = $externalData);
 </script>
 
 <Container className="-mb-10">
@@ -33,21 +28,7 @@
           <option value="{coin.symbol}">{coin.name}</option>
         {/each}
       </select>
-      <button
-        class="transition border focus:ring-2 ring-gray-200 bg-gray-50 hover:bg-gray-100 rounded p-3 text-gray-700 flex items-center text-sm"
-        on:click="{async () => {
-          refreshing = true;
-          // await refresh();
-          refreshing = false;
-        }}"
-      >
-        <Icon
-          src="{Refresh}"
-          size="16"
-          class="text-gray-700 {refreshing && 'animate-spin'}"
-          solid
-        />
-      </button>
+      <Refresh />
     </div>
   {:else}
     <p>Loading coins...</p>

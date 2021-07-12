@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import { updateData } from "$lib/store";
   import Hero from "$lib/components/Hero.svelte";
   import Stats from "$lib/components/Stats.svelte";
   import CoinSelection from "$lib/components/CoinSelection.svelte";
@@ -6,18 +8,28 @@
   import CoinDownload from "$lib/components/CoinDownload.svelte";
   import ApiDetails from "$lib/components/ApiDetails.svelte";
   import About from "$lib/components/About.svelte";
+
+  onMount(async () => {
+    await updateData();
+  });
 </script>
 
-<Hero />
+<header>
+  <Hero />
+</header>
 
-<Stats />
+<main>
+  <Stats />
 
-<CoinSelection />
+  <CoinSelection />
 
-<CoinChart />
+  <CoinChart />
 
-<CoinDownload />
+  <CoinDownload />
 
-<ApiDetails />
+  <ApiDetails />
+</main>
 
-<About />
+<footer>
+  <About />
+</footer>

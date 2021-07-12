@@ -35,6 +35,7 @@
   "dependencies": {
     "js-file-download": "^0.4.12",
     "svelte-hero-icons": "^2.2.0",
+    "svelte-twemoji": "^1.0.4",
     "uplot": "^1.6.13"
   }
 }
