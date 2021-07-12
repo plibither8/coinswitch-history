@@ -1,4 +1,5 @@
 <script>
+  import Icon, { ExternalLink } from "svelte-hero-icons";
   import Container from "./Container.svelte";
 </script>
 
@@ -21,8 +22,8 @@
     SQLite and seemingly bad code :).
   </p>
   <a
-    class="underline text-black inline-block"
+    class="underline text-black flex items-center"
     href="https://github.com/plibither8/coinswitch-history"
-    >View code on GitHub</a
+    >View code on GitHub <Icon src="{ExternalLink}" size="16" class="ml-1" /></a
   >
 </Container>

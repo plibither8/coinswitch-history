@@ -4,7 +4,8 @@
   import api, { API_BASE } from "$lib/api";
   import { externalData, selectedCoin } from "$lib/store";
   import Container from "./Container.svelte";
-  import Icon, { Refresh } from "svelte-hero-icons";
+  import Icon, { CursorClick, Refresh } from "svelte-hero-icons";
+  import SectionHeading from "./SectionHeading.svelte";
 
   let coins: Coin[] = [];
   let refreshing = false;
@@ -16,13 +17,11 @@
 </script>
 
 <Container className="-mb-10">
-  <div class="space-y-1">
-    <h1 class="text-xl font-bold text-gray-700">1. Select a coin</h1>
-    <p class="text-base text-gray-600 leading-relaxed">
-      Choose from the {coins.length} coins available on the exchange
-    </p>
-  </div>
-
+  <SectionHeading
+    heading="Select a coin"
+    description="Choose from the {coins.length} coins available on the exchange."
+    icon="{CursorClick}"
+  />
   {#if coins.length}
     <div class="flex items-center space-x-5">
       <img class="h-7 w-7" src="{API_BASE}icons/{$selectedCoin}.png" alt="" />

@@ -1,8 +1,9 @@
 <script lang="ts">
   import fileDownload from "js-file-download";
-  import Icon, { Database, ViewList } from "svelte-hero-icons";
+  import Icon, { Database, Download, ViewList } from "svelte-hero-icons";
   import { externalData, selectedCoin } from "$lib/store";
   import Container from "./Container.svelte";
+  import SectionHeading from "./SectionHeading.svelte";
 
   const getFilename = (ext: string): string =>
     `${$selectedCoin}_${new Date().toISOString()}.${ext}`;
@@ -24,12 +25,11 @@
 </script>
 
 <Container>
-  <div class="space-y-1">
-    <h1 class="text-xl font-bold text-gray-700">3. Download the data</h1>
-    <p class="text-base text-gray-600 leading-relaxed">
-      Download the timeseries data for the {$selectedCoin.toUpperCase()}.
-    </p>
-  </div>
+  <SectionHeading
+    heading="Download the data"
+    description="Download the timeseries data for the {$selectedCoin.toUpperCase()}."
+    icon="{Download}"
+  />
   <div class="flex flex-col sm:flex-row sm:space-x-5 space-y-5 sm:space-y-0">
     <button
       class="space-x-3 ring-green-100 bg-green-50 hover:bg-green-100 hover:border-green-300 border-green-200 text-green-700"

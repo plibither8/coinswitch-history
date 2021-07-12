@@ -5,6 +5,8 @@
   import Container from "./Container.svelte";
   import api from "$lib/api";
   import { externalData, selectedCoin } from "$lib/store";
+  import { ChartBar } from "svelte-hero-icons";
+  import SectionHeading from "./SectionHeading.svelte";
 
   const getPlotData = async (symbol: string): Promise<number[][]> => {
     $externalData.history = (await api<History[]>(`history/${symbol}`)).data;
@@ -18,6 +20,8 @@
   };
 
   const renderHistoryPlot = async (coin: string) => {
+    if (!uPlot) return;
+
     const plotRoot = document.querySelector("#plot");
     plotRoot.innerHTML = "";
 
@@ -49,26 +53,20 @@
   };
 
   let uPlot;
-  let mounted = false;
   let loadingPlot = false;
-  $: mounted && renderHistoryPlot($selectedCoin);
+  $: uPlot && renderHistoryPlot($selectedCoin);
 
   onMount(async () => {
     uPlot = (await import("uplot")).default;
-    mounted = true;
   });
 </script>
 
 <Container>
-  <div class="space-y-1">
-    <h1 class="text-xl font-bold text-gray-700">
-      2. Explore the charts and details
-    </h1>
-    <p class="text-base text-gray-600 leading-relaxed">
-      Hover to see prices, select ranges to zoom in. Charts are optimized for
-      desktop, just btw.
-    </p>
-  </div>
+  <SectionHeading
+    heading="Explore the charts"
+    description="Hover to see prices, select ranges to zoom in. Charts are optimized for desktop, just btw."
+    icon="{ChartBar}"
+  />
 </Container>
 
 <section class="flex justify-center">
@@ -78,7 +76,7 @@
     {#if loadingPlot}
       <p transition:slide>Loading history...</p>
     {/if}
-    <div transition:slide id="plot" class="flex"></div>
+    <div id="plot" class="flex"></div>
   </div>
 </section>
 
