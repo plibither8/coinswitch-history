@@ -2,7 +2,7 @@ import env from "$lib/env";
 
 export const { API_BASE } = env;
 
-interface ApiResponse<T = any> {
+export interface ApiResponse<T = any> {
   data: undefined | T;
   error: undefined | any;
 }

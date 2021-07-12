@@ -20,7 +20,7 @@
       endpoint: "/history/:symbol",
       description:
         "Get the history of a coin, specified by its symbol in lowercase.",
-      exampleResponse: [$externalData.history[0]],
+      exampleResponse: [$externalData.history?.[0]],
     },
     {
       title: "Get list of coins",
@@ -28,7 +28,7 @@
       endpoint: "/coins",
       description:
         "Get list of coins available on the exchange and this service.",
-      exampleResponse: [$externalData.coins[0]],
+      exampleResponse: [$externalData.coins?.[0]],
     },
     {
       title: "Get stats and status of this service and DB",

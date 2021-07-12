@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { DEFAULT_SELECTED_COIN } from "./constants";
-import api from "./api";
+import api, { ApiResponse } from "./api";
 import type { Coin, History, Stats } from "./interface";
 import { get_store_value as get } from "svelte/internal";
 
@@ -20,11 +20,14 @@ export const refreshing = writable<boolean>(false);
 
 export const updateData = async () => {
   refreshing.set(true);
-  const data = await Promise.all([
-    api<Coin[]>("coins"),
-    api<History[]>(`history/${get(selectedCoin)}`),
-    api<any>("status"),
-  ]);
+  let data: ApiResponse[] = [];
+  do {
+    data = await Promise.all([
+      api<Coin[]>("coins"),
+      api<History[]>(`history/${get(selectedCoin)}`),
+      api<any>("status"),
+    ]);
+  } while (!data[0]);
   refreshing.set(false);
 
   externalData.set({
