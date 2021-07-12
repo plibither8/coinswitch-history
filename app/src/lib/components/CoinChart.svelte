@@ -81,6 +81,7 @@
     renderHistoryPlot($externalData.history);
     $chartSettings.intervals.selected;
   }
+  $: plotRoot && (loadingHistory || $updating) && (plotRoot.innerHTML = "");
 
   onMount(async () => {
     uPlot = (await import("uplot")).default;
@@ -88,7 +89,7 @@
   });
 </script>
 
-<Container className="-mb-10">
+<Container className="md:-mb-10">
   <SectionHeading
     heading="Explore the charts"
     description="Hover to see prices, select ranges to zoom in. Charts are optimized for desktop, just btw."
