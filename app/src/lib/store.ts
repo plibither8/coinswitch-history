@@ -16,10 +16,10 @@ export const externalData = writable<{
   stats: undefined,
 });
 
-export const refreshing = writable<boolean>(false);
+export const updating = writable<boolean>(false);
 
 export const updateData = async () => {
-  refreshing.set(true);
+  updating.set(true);
   let data: ApiResponse[] = [];
   do {
     data = await Promise.all([
@@ -28,7 +28,7 @@ export const updateData = async () => {
       api<any>("status"),
     ]);
   } while (!data[0]);
-  refreshing.set(false);
+  updating.set(false);
 
   externalData.set({
     coins: data[0].data,
@@ -36,3 +36,43 @@ export const updateData = async () => {
     stats: data[2].data,
   });
 };
+
+export const chartSettings = writable({
+  intervals: {
+    selected: 0,
+    values: [
+      {
+        label: "5min",
+        mod5: 1,
+      },
+      {
+        label: "10min",
+        mod5: 2,
+      },
+      {
+        label: "30min",
+        mod5: 6,
+      },
+      {
+        label: "1h",
+        mod5: 12,
+      },
+      {
+        label: "3h",
+        mod5: 36,
+      },
+      {
+        label: "6h",
+        mod5: 72,
+      },
+      {
+        label: "1d",
+        mod5: 288,
+      },
+    ],
+  },
+  ranges: {
+    selected: 0,
+    values: ["1d", "3d", "1w", "1M"],
+  },
+});

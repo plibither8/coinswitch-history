@@ -11,7 +11,7 @@
   $: ({ coins } = $externalData);
 </script>
 
-<Container className="-mb-10">
+<Container>
   <SectionHeading
     heading="Select a coin"
     description="Choose from the {coins.length} coins available on the exchange."

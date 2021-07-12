@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon, { Refresh } from "svelte-hero-icons";
-  import { refreshing, updateData } from "$lib/store";
+  import { updating, updateData } from "$lib/store";
 </script>
 
 <button
@@ -10,7 +10,7 @@
   <Icon
     src="{Refresh}"
     size="16"
-    class="text-gray-700 {$refreshing && 'animate-spin'}"
+    class="text-gray-700 {$updating && 'animate-spin'}"
     solid
   />
 </button>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
   import { cubicOut } from "svelte/easing";
-  import { externalData, refreshing } from "$lib/store";
+  import { externalData, updating } from "$lib/store";
   import Container from "./Container.svelte";
   import ListItem from "./ListItem.svelte";
   import Ping from "./Ping.svelte";
@@ -15,7 +15,7 @@
 
 <Container className="bg-gray-50 border-b">
   <h1 class="text-lg font-bold text-gray-900">Stats</h1>
-  {#if stats && !$refreshing}
+  {#if stats && !$updating}
     <ul
       transition:slide="{{ duration: 200, easing: cubicOut }}"
       class="space-y-1"

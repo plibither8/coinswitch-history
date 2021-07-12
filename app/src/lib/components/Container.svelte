@@ -2,7 +2,7 @@
   export let className: string = "";
 </script>
 
-<section class="{className}">
+<section class="{className} w-full">
   <div class="max-w-4xl mx-auto py-10 px-5 space-y-5">
     <slot />
   </div>

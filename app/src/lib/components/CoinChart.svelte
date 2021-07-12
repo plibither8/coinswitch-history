@@ -4,15 +4,27 @@
   import { slide } from "svelte/transition";
   import Container from "./Container.svelte";
   import api from "$lib/api";
-  import { externalData, selectedCoin, refreshing } from "$lib/store";
+  import {
+    externalData,
+    selectedCoin,
+    updating,
+    chartSettings,
+  } from "$lib/store";
   import { ChartBar } from "svelte-hero-icons";
   import SectionHeading from "./SectionHeading.svelte";
+  import ChartSettings from "./ChartSettings.svelte";
 
   const updateHistory = async (symbol: string): Promise<void> => {
-    loadingPlot = true;
+    loadingHistory = true;
     $externalData.history = (await api<History[]>(`history/${symbol}`)).data;
-    loadingPlot = false;
+    loadingHistory = false;
   };
+
+  const intervalFilter = (index: number) =>
+    !(
+      index %
+      $chartSettings.intervals.values[$chartSettings.intervals.selected].mod5
+    );
 
   const getPlotData = (history: History[]): number[][] => {
     const timestamps = history.map(
@@ -20,11 +32,14 @@
     );
     const buy = history.map((entry) => entry.buyPrice);
     const sell = history.map((entry) => entry.sellPrice);
-    return [timestamps, buy, sell];
+    return [timestamps, buy, sell].map((series) =>
+      series.filter((_, i) => intervalFilter(i))
+    );
   };
 
   const renderHistoryPlot = async (history: History[]) => {
     if (!uPlot) return;
+    plotRoot.innerHTML = "";
     const plotData = getPlotData(history);
     new uPlot(
       {
@@ -59,11 +74,13 @@
 
   let uPlot;
   let plotRoot: HTMLDivElement;
-  let loadingPlot = false;
+  let loadingHistory = false;
 
-  $: !$refreshing && updateHistory($selectedCoin);
-  $: renderHistoryPlot($externalData.history);
-  $: plotRoot && (loadingPlot || $refreshing) && (plotRoot.innerHTML = "");
+  $: !$updating && updateHistory($selectedCoin);
+  $: {
+    renderHistoryPlot($externalData.history);
+    $chartSettings.intervals.selected;
+  }
 
   onMount(async () => {
     uPlot = (await import("uplot")).default;
@@ -71,19 +88,20 @@
   });
 </script>
 
-<Container>
+<Container className="-mb-10">
   <SectionHeading
     heading="Explore the charts"
     description="Hover to see prices, select ranges to zoom in. Charts are optimized for desktop, just btw."
     icon="{ChartBar}"
   />
+  <ChartSettings />
 </Container>
 
 <section class="flex justify-center">
   <div
     class="mx-5 p-5 md:p-10 rounded-lg md:rounded-xl shadow-md md:shadow-lg bg-white max-w-7xl overflow-auto"
   >
-    {#if loadingPlot || $refreshing}
+    {#if loadingHistory || $updating}
       <p transition:slide>Loading history...</p>
     {/if}
     <div id="plot" class="flex"></div>
