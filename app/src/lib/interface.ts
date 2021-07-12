@@ -15,3 +15,17 @@ export interface History {
     time: string;
   };
 }
+
+export interface Stats {
+  dbFileSize: string;
+  firstTime: string;
+  lastUpdated: {
+    relative: string;
+    absolute: string;
+  };
+  count: {
+    coin: number;
+    history: number;
+    time: number;
+  };
+}

@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import { DEFAULT_SELECTED_COIN } from "./constants";
 import api from "./api";
-import type { Coin, History } from "./interface";
+import type { Coin, History, Stats } from "./interface";
 import { get_store_value as get } from "svelte/internal";
 
 export const selectedCoin = writable<string>(DEFAULT_SELECTED_COIN);
@@ -9,11 +9,11 @@ export const selectedCoin = writable<string>(DEFAULT_SELECTED_COIN);
 export const externalData = writable<{
   history: History[];
   coins: Coin[];
-  stats: any;
+  stats: Stats | undefined;
 }>({
   history: [],
   coins: [],
-  stats: {},
+  stats: undefined,
 });
 
 export const refreshing = writable<boolean>(false);

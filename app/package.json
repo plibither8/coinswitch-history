@@ -1,6 +1,5 @@
 {
-  "name": "~TODO~",
-  "version": "0.0.1",
+  "name": "coinswitch-history",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",

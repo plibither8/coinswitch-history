@@ -5,16 +5,17 @@
   import Container from "./Container.svelte";
   import ListItem from "./ListItem.svelte";
   import Ping from "./Ping.svelte";
+  import type { Stats } from "$lib/interface";
 
   const localDate = (date: string): string => new Date(date).toLocaleString();
 
-  let stats: any = {};
+  let stats: Stats;
   $: ({ stats } = $externalData);
 </script>
 
 <Container className="bg-gray-50 border-b">
   <h1 class="text-lg font-bold text-gray-900">Stats</h1>
-  {#if Object.keys(stats).length && !$refreshing}
+  {#if stats && !$refreshing}
     <ul
       transition:slide="{{ duration: 200, easing: cubicOut }}"
       class="space-y-1"
