@@ -1,22 +1,36 @@
-# Simple TypeScript Starter
+# 🪙 CoinSwitch History API
 
-> Bare minimum TypeScript project template to get started quickly.
+Built using:
 
-A bare minimum, no-frills TypeScript starter template with development/production scripts and linting included.
+- Prisma
+- SQLite
+- Polka
 
-- Nodemon + `ts-node` for development
-- `tsc` for building production distribution
+## Developing
 
-Entry file: `src/main.ts`.
+Run the development server of the API that watches for file changes through Nodemon.
 
-## Get Started
+```bash
+npm run dev
+```
 
-1. Create a repo from this template and locally clone it. Or... run `npx degit plibither8/typescript` to get it directly onto your machine.
-2. `npm install` or `pnpm install` or `yarn`, as per your taste
-3. `npm run dev` for running in development mode (watches files)
-4. `npm run build` for building production files
-5. `npm run start` for running production-built files
+## Building
 
-## License
+Build the production files, using the `tsc` compiler.
 
-[MIT](LICENSE)
+```bash
+npm run build
+```
+
+Start production API server:
+
+```bash
+npm start
+```
+
+Run data collector:
+
+```bash
+npm run start-coinswitch        # to run once
+npm run start-coinswitch loop   # to run in a loop, every five minutes
+```
