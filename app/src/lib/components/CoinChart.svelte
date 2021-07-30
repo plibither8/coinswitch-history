@@ -16,7 +16,7 @@
 
   const updateHistory = async (symbol: string): Promise<void> => {
     loadingHistory = true;
-    $externalData.history = (await api<History[]>(`history/${symbol}`)).data;
+    $externalData.history = (await api<History>(`history/${symbol}`)).data;
     loadingHistory = false;
   };
 
@@ -26,21 +26,12 @@
       $chartSettings.intervals.values[$chartSettings.intervals.selected].mod5
     );
 
-  const getPlotData = (history: History[]): number[][] => {
-    const timestamps = history.map(
-      (entry) => new Date(entry.time.time).getTime() / 1000
-    );
-    const buy = history.map((entry) => entry.buyPrice);
-    const sell = history.map((entry) => entry.sellPrice);
-    return [timestamps, buy, sell].map((series) =>
-      series.filter((_, i) => intervalFilter(i))
-    );
-  };
-
-  const renderHistoryPlot = async (history: History[]) => {
+  const renderHistoryPlot = async (history: History) => {
     if (!uPlot) return;
     plotRoot.innerHTML = "";
-    const plotData = getPlotData(history);
+    const plotData = history.map((series) =>
+      series.filter((_, i) => intervalFilter(i))
+    );
     new uPlot(
       {
         height: 600,

@@ -4,17 +4,7 @@ export interface Coin {
   name: string;
 }
 
-export interface History {
-  id: number;
-  symbol: string;
-  buyPrice: number;
-  sellPrice: number;
-  timeId: number;
-  time: {
-    id: number;
-    time: string;
-  };
-}
+export type History = [number[], number[], number[]];
 
 export interface Stats {
   dbFileSize: string;

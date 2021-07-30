@@ -7,11 +7,11 @@ import { get_store_value as get } from "svelte/internal";
 export const selectedCoin = writable<string>(DEFAULT_SELECTED_COIN);
 
 export const externalData = writable<{
-  history: History[];
+  history: History;
   coins: Coin[];
   stats: Stats | undefined;
 }>({
-  history: [],
+  history: [[], [], []],
   coins: [],
   stats: undefined,
 });
@@ -24,7 +24,7 @@ export const updateData = async () => {
   do {
     data = await Promise.all([
       api<Coin[]>("coins"),
-      api<History[]>(`history/${get(selectedCoin)}`),
+      api<History>(`history/${get(selectedCoin)}`),
       api<any>("status"),
     ]);
   } while (!data[0]);

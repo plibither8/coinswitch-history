@@ -42,7 +42,12 @@ server.get("/history/:symbol", async (req, res) => {
     where: { symbol },
     include: { time: true },
   });
-  send(cors(res), 200, history);
+  const formatted = [
+    history.map(({ time }) => time.time.getTime() / 1000),
+    history.map(({ buyPrice }) => buyPrice),
+    history.map(({ sellPrice }) => sellPrice),
+  ];
+  send(cors(res), 200, formatted);
 });
 
 // Show simple stats of the db
