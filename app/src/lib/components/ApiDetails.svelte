@@ -18,9 +18,11 @@
       title: "Get history of a coin",
       method: "GET",
       endpoint: "/history/:symbol",
-      description:
-        "Get the history of a coin, specified by its symbol in lowercase.",
-      exampleResponse: [$externalData.history?.[0]],
+      description: `Get the history of a coin, specified by its symbol in lowercase.
+        Response is an array of timestamps, buy prices and sell prices, respectively.`,
+      exampleResponse: $externalData.history?.map((series) =>
+        series.slice(0, 5)
+      ),
     },
     {
       title: "Get list of coins",
