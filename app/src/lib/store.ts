@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import { DEFAULT_SELECTED_COIN } from "./constants";
-import api, { ApiResponse } from "./api";
+import api from "./api";
+import type { ApiResponse } from "./api"
 import type { Coin, History, Stats } from "./interface";
 import { get_store_value as get } from "svelte/internal";
 

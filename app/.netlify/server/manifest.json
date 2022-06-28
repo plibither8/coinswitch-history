@@ -1,0 +1,51 @@
+{
+  ".svelte-kit/build/index.js": {
+    "file": "index.js",
+    "src": ".svelte-kit/build/index.js",
+    "isEntry": true,
+    "imports": [
+      "_index-0a594dbc.js"
+    ],
+    "dynamicImports": [
+      ".svelte-kit/build/hooks.js"
+    ]
+  },
+  "src/routes/__layout.svelte": {
+    "file": "entries/pages/__layout.svelte.js",
+    "src": "src/routes/__layout.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-0a594dbc.js"
+    ],
+    "css": [
+      "assets/entries/pages/__layout.svelte-45b83717.css"
+    ]
+  },
+  ".svelte-kit/runtime/components/error.svelte": {
+    "file": "entries/fallbacks/error.svelte.js",
+    "src": ".svelte-kit/runtime/components/error.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-0a594dbc.js"
+    ]
+  },
+  "src/routes/index.svelte": {
+    "file": "entries/pages/index.svelte.js",
+    "src": "src/routes/index.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-0a594dbc.js"
+    ],
+    "css": [
+      "assets/entries/pages/index.svelte-3c4879b8.css"
+    ]
+  },
+  "_index-0a594dbc.js": {
+    "file": "chunks/index-0a594dbc.js"
+  },
+  ".svelte-kit/build/hooks.js": {
+    "file": "chunks/hooks-1c45ba0b.js",
+    "src": ".svelte-kit/build/hooks.js",
+    "isDynamicEntry": true
+  }
+}

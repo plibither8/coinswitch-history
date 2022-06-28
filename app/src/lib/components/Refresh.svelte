@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Icon, { Refresh } from "svelte-hero-icons";
+  import { Icon, Refresh } from "svelte-hero-icons";
   import { updating, updateData } from "$lib/store";
 </script>
 

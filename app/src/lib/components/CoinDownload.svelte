@@ -1,6 +1,6 @@
 <script lang="ts">
   import fileDownload from "js-file-download";
-  import Icon, { Database, Download, ViewList } from "svelte-hero-icons";
+  import { Icon, Database, Download, ViewList } from "svelte-hero-icons";
   import { externalData, selectedCoin } from "$lib/store";
   import Container from "./Container.svelte";
   import SectionHeading from "./SectionHeading.svelte";

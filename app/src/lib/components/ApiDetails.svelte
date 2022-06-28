@@ -57,7 +57,7 @@
   </p>
   <ul class="space-y-1">
     <ListItem>
-      <strong>Base URL:</strong> <span>https://api.cs.mhr.cx/</span>
+      <strong>Base URL:</strong> <span>https://api.coinswitch.mihir.ch/</span>
     </ListItem>
     <ListItem>No authentication/authorization or API key required.</ListItem>
     <ListItem>
